@@ -20,6 +20,8 @@ import twitter4j.Relationship;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
+import twitter4j.conf.ConfigurationBuilder;
+import twitter4j.examples.TwitterCredential;
 
 /**
  * Shows friendship between two users.
@@ -38,14 +40,21 @@ public final class ShowFriendship {
             System.exit(-1);
         }
         try {
-            Twitter twitter = new TwitterFactory().getInstance();
-            Relationship relationship = twitter.showFriendship(args[0], args[1]);
-            System.out.println("isSourceBlockingTarget: " + relationship.isSourceBlockingTarget());
-            System.out.println("isSourceFollowedByTarget: " + relationship.isSourceFollowedByTarget());
-            System.out.println("isSourceFollowingByTarget: " + relationship.isSourceFollowingTarget());
-            System.out.println("isSourceNotificationsEnabled: " + relationship.isSourceNotificationsEnabled());
-            System.out.println("canSourceDm: " + relationship.canSourceDm());
-            System.exit(0);
+					ConfigurationBuilder cb = new ConfigurationBuilder();
+					TwitterCredential tc = new TwitterCredential();
+					cb.setDebugEnabled(true)
+						.setOAuthConsumerKey(tc.consumerKey)
+						.setOAuthConsumerSecret(tc.consumerSecret)
+						.setOAuthAccessToken(tc.token)
+						.setOAuthAccessTokenSecret(tc.secret);
+					Twitter twitter = new TwitterFactory(cb.build()).getInstance();
+					Relationship relationship = twitter.showFriendship(args[0], args[1]);
+					System.out.println("isSourceBlockingTarget: " + relationship.isSourceBlockingTarget());
+					System.out.println("isSourceFollowedByTarget: " + relationship.isSourceFollowedByTarget());
+					System.out.println("isSourceFollowingByTarget: " + relationship.isSourceFollowingTarget());
+					System.out.println("isSourceNotificationsEnabled: " + relationship.isSourceNotificationsEnabled());
+					System.out.println("canSourceDm: " + relationship.canSourceDm());
+					System.exit(0);
         } catch (TwitterException te) {
             te.printStackTrace();
             System.out.println("Failed to show friendship: " + te.getMessage());

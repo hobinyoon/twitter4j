@@ -17,6 +17,8 @@
 package twitter4j.examples.friendship;
 
 import twitter4j.*;
+import twitter4j.conf.ConfigurationBuilder;
+import twitter4j.examples.TwitterCredential;
 
 /**
  * Looks up friendships.
@@ -24,31 +26,38 @@ import twitter4j.*;
  * @author Yusuke Yamamoto - yusuke at mac.com
  */
 public final class LookupFriendships {
-    /**
-     * Usage: java twitter4j.examples.user.LookupFriendships [screen name[,screen name..]]
-     *
-     * @param args message
-     */
-    public static void main(String[] args) {
-        if (args.length < 1) {
-            System.out.println(
-                    "Usage: java twitter4j.examples.user.LookupFriendships [screen name[,screen name..]]");
-            System.exit(-1);
-        }
-        try {
-            Twitter twitter = new TwitterFactory().getInstance();
-            ResponseList<Friendship> friendships = twitter.lookupFriendships(args[0].split(","));
-            for (Friendship friendship : friendships) {
-                System.out.println("@" + friendship.getScreenName()
-                        + " following: " + friendship.isFollowing()
-                        + " followed_by: " + friendship.isFollowedBy());
-            }
-            System.out.println("Successfully looked up friendships [" + args[0] + "].");
-            System.exit(0);
-        } catch (TwitterException te) {
-            te.printStackTrace();
-            System.out.println("Failed to lookup friendships: " + te.getMessage());
-            System.exit(-1);
-        }
-    }
+	/**
+	 * Usage: java twitter4j.examples.user.LookupFriendships [screen name[,screen name..]]
+	 *
+	 * @param args message
+	 */
+	public static void main(String[] args) {
+		if (args.length < 1) {
+			System.out.println(
+					"Usage: java twitter4j.examples.user.LookupFriendships [screen name[,screen name..]]");
+			System.exit(-1);
+		}
+		try {
+			ConfigurationBuilder cb = new ConfigurationBuilder();
+			TwitterCredential tc = new TwitterCredential();
+			cb.setDebugEnabled(true)
+				.setOAuthConsumerKey(tc.consumerKey)
+				.setOAuthConsumerSecret(tc.consumerSecret)
+				.setOAuthAccessToken(tc.token)
+				.setOAuthAccessTokenSecret(tc.secret);
+			Twitter twitter = new TwitterFactory(cb.build()).getInstance();
+			ResponseList<Friendship> friendships = twitter.lookupFriendships(args[0].split(","));
+			for (Friendship friendship : friendships) {
+				System.out.println("@" + friendship.getScreenName()
+						+ " following: " + friendship.isFollowing()
+						+ " followed_by: " + friendship.isFollowedBy());
+			}
+			System.out.println("Successfully looked up friendships [" + args[0] + "].");
+			System.exit(0);
+		} catch (TwitterException te) {
+			te.printStackTrace();
+			System.out.println("Failed to lookup friendships: " + te.getMessage());
+			System.exit(-1);
+		}
+	}
 }

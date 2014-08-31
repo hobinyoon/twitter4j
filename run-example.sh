@@ -32,6 +32,10 @@ function build_src {
 
 build_src
 
-java -cp twitter4j-examples/target/twitter4j-examples-4.0.3-SNAPSHOT.jar:`cat $DEF_CLASS_PATH_FILE` twitter4j.examples.friendship.LookupFriendships "${@:2}"
+#java -cp twitter4j-examples/target/twitter4j-examples-4.0.3-SNAPSHOT.jar:`cat $DEF_CLASS_PATH_FILE` twitter4j.examples.friendship.ShowFriendship "${@:1}"
+#java -cp twitter4j-examples/target/twitter4j-examples-4.0.3-SNAPSHOT.jar:`cat $DEF_CLASS_PATH_FILE` twitter4j.examples.friendship.ShowFriendship "${@:1}"
+#java -cp twitter4j-examples/target/twitter4j-examples-4.0.3-SNAPSHOT.jar:`cat $DEF_CLASS_PATH_FILE` twitter4j.examples.friendship.LookupFriendships "${@:1}"
+java -cp twitter4j-examples/target/twitter4j-examples-4.0.3-SNAPSHOT.jar:`cat $DEF_CLASS_PATH_FILE` twitter4j.examples.friendsandfollowers.GetFriendsIDs "${@:1}"
+#java -cp twitter4j-examples/target/twitter4j-examples-4.0.3-SNAPSHOT.jar:`cat $DEF_CLASS_PATH_FILE` twitter4j.examples.friendsandfollowers.GetFollowersIDs "${@:1}"
 
 popd > /dev/null

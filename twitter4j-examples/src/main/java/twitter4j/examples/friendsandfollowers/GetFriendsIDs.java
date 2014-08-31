@@ -20,6 +20,8 @@ import twitter4j.IDs;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
+import twitter4j.conf.ConfigurationBuilder;
+import twitter4j.examples.TwitterCredential;
 
 /**
  * Lists friends' ids
@@ -34,21 +36,28 @@ public final class GetFriendsIDs {
      */
     public static void main(String[] args) {
         try {
-            Twitter twitter = new TwitterFactory().getInstance();
-            long cursor = -1;
-            IDs ids;
-            System.out.println("Listing following ids.");
-            do {
-                if (0 < args.length) {
-                    ids = twitter.getFriendsIDs(args[0], cursor);
-                } else {
-                    ids = twitter.getFriendsIDs(cursor);
-                }
-                for (long id : ids.getIDs()) {
-                    System.out.println(id);
-                }
-            } while ((cursor = ids.getNextCursor()) != 0);
-            System.exit(0);
+					ConfigurationBuilder cb = new ConfigurationBuilder();
+					TwitterCredential tc = new TwitterCredential();
+					cb.setDebugEnabled(true)
+						.setOAuthConsumerKey(tc.consumerKey)
+						.setOAuthConsumerSecret(tc.consumerSecret)
+						.setOAuthAccessToken(tc.token)
+						.setOAuthAccessTokenSecret(tc.secret);
+					Twitter twitter = new TwitterFactory(cb.build()).getInstance();
+					long cursor = -1;
+					IDs ids;
+					System.out.println("Listing following ids.");
+					do {
+						if (0 < args.length) {
+							ids = twitter.getFriendsIDs(args[0], cursor);
+						} else {
+							ids = twitter.getFriendsIDs(cursor);
+						}
+						for (long id : ids.getIDs()) {
+							System.out.println(id);
+						}
+					} while ((cursor = ids.getNextCursor()) != 0);
+					System.exit(0);
         } catch (TwitterException te) {
             te.printStackTrace();
             System.out.println("Failed to get friends' ids: " + te.getMessage());
